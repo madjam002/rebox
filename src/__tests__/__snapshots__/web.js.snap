@@ -2,7 +2,7 @@
 
 exports[`should render when some of the children are null 1`] = `
 <div
-  className="sc-bdVaJa dtgtCY"
+  className="sc-bdVaJa kUCJnS"
 >
   <div
     className="sc-bdVaJa ldPWqb"
@@ -21,7 +21,7 @@ exports[`should render when some of the children are null 1`] = `
 
 exports[`should render when some of the children are strings 1`] = `
 <div
-  className="sc-bdVaJa dtgtCY"
+  className="sc-bdVaJa kUCJnS"
 >
   <div
     className="sc-bdVaJa ldPWqb"
