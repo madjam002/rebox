@@ -148,7 +148,7 @@ const getSpacingContainerStyle = props => {
   if (style.alignItems == null) delete style.alignItems
   if (style.justifyContent == null) delete style.justifyContent
 
-  if (props.wrap) {
+  if (props.wrap !== false) {
     style.flexWrap = 'wrap'
   }
 
