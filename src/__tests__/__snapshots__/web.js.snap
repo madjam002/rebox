@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render when some of the children are null 1`] = `
+<div
+  className="sc-bdVaJa dtgtCY"
+>
+  <div
+    className="sc-bdVaJa ldPWqb"
+    fill={undefined}
+  >
+    <div />
+  </div>
+  <div
+    className="sc-bdVaJa ldPWqb"
+    fill={undefined}
+  >
+    <span />
+  </div>
+</div>
+`;
+
+exports[`should render when some of the children are strings 1`] = `
+<div
+  className="sc-bdVaJa dtgtCY"
+>
+  <div
+    className="sc-bdVaJa ldPWqb"
+    fill={undefined}
+  >
+    <div />
+  </div>
+  <div
+    className="sc-bdVaJa ldPWqb"
+  >
+    I am a string!
+  </div>
+  <div
+    className="sc-bdVaJa ldPWqb"
+    fill={undefined}
+  >
+    <span />
+  </div>
+</div>
+`;

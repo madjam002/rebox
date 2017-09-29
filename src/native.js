@@ -2,85 +2,37 @@
 
 import React from 'react'
 import { View, Dimensions } from 'react-native'
-
-import type { Children } from 'react'
-
-const space = count => count * 10
-
-export type BoxProps = {
-  // horizontal / vertical spaced children
-  stacked?: boolean,
-  horizontal?: boolean,
-  wrap?: boolean,
-  spaceBetween?: number,
-  noSpaceBetween?: boolean,
-
-  // positioning
-  top?: number,
-  right?: number,
-  bottom?: number,
-  left?: number,
-
-  // alignment
-  vAlign?: 'top' | 'center' | 'bottom' | 'spaceAround' | 'spaceBetween',
-  hAlign?: 'top' | 'center' | 'bottom' | 'spaceAround' | 'spaceBetween',
-
-  // sizing for child boxes
-  fill?: boolean,
-  w?: number | number[],
-  h?: number | number[],
-
-  // misc
-  children?: Children,
-
-  // internal
-  __boxIsSpacingChild?: boolean,
-  __boxParentSpaceBetween?: number,
-}
-
-const HORIZONTAL_VALIGN_MAP = {
-  top: 'flex-start',
-  center: 'center',
-  bottom: 'flex-end',
-}
-
-const HORIZONTAL_HALIGN_MAP = {
-  left: 'flex-start',
-  center: 'center',
-  right: 'flex-end',
-  spaceAround: 'space-around',
-  spaceBetween: 'space-between',
-}
-
-const STACKED_VALIGN_MAP = {
-  top: 'flex-start',
-  center: 'center',
-  bottom: 'flex-end',
-  spaceAround: 'space-around',
-  spaceBetween: 'space-between',
-}
-
-const STACKED_HALIGN_MAP = {
-  left: 'flex-start',
-  center: 'center',
-  bottom: 'flex-end',
-}
+import {
+  BREAKPOINTS,
+  space,
+  getSpaceBetween,
+  calculateSize,
+  computeAlignItems,
+  computeJustifyContent,
+} from './common'
+import type { BoxProps } from './common'
 
 const rerenderOnViewportChange = Component =>
-  class extends React.Component {
-    constructor(props) {
+  class extends React.Component<any, any> {
+    handleChange: any
+
+    constructor(props: any) {
       super(props)
       this.handleChange = this.handleChange.bind(this)
     }
 
     componentWillMount() {
       Dimensions.addEventListener('screen', this.handleChange)
-      window.addEventListener('resize', this.handleChange)
+      if (typeof window !== 'undefined' && window.addEventListener) {
+        window.addEventListener('resize', this.handleChange)
+      }
     }
 
     componentWillUnmount() {
       Dimensions.removeEventListener('screen', this.handleChange)
-      window.removeEventListener('resize', this.handleChange)
+      if (typeof window !== 'undefined' && window.addEventListener) {
+        window.removeEventListener('resize', this.handleChange)
+      }
     }
 
     handleChange() {
@@ -92,11 +44,20 @@ const rerenderOnViewportChange = Component =>
     }
   }
 
+const calculatePosition = value => {
+  if (value === true) {
+    return 0
+  } else if (value == null || value === false) {
+    return undefined
+  }
+
+  return space(value)
+}
+
 export const Box = rerenderOnViewportChange((_props: BoxProps) => {
   let props = _props
   const isChildABox =
-    React.Children.count(props.children) === 1 &&
-    React.Children.only(props.children).type === Box
+    React.Children.count(props.children) === 1 && React.Children.only(props.children).type === Box
 
   if (isChildABox) {
     props = Object.assign({}, _props, React.Children.only(props.children).props)
@@ -104,7 +65,8 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
 
   const responsiveProps = getCurrentValuesForResponsiveProps(props)
 
-  const hasPosition = props.top || props.right || props.bottom || props.left
+  const hasPosition =
+    props.top != null || props.right != null || props.bottom != null || props.left != null
 
   const width = calculateSize(responsiveProps.w)
   const height = calculateSize(responsiveProps.h)
@@ -112,39 +74,33 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
   const style: Object = {
     flexGrow: 1,
     position: hasPosition ? 'absolute' : 'relative',
-    top: space(props.top),
-    right: space(props.right),
-    bottom: space(props.bottom),
-    left: space(props.left),
+    top: calculatePosition(responsiveProps.top),
+    right: calculatePosition(responsiveProps.right),
+    bottom: calculatePosition(responsiveProps.bottom),
+    left: calculatePosition(responsiveProps.left),
     width,
     height,
   }
 
-  const isSpacingContainer = props.stacked || props.horizontal || props.wrap
-  const isSpacingChild = props.__boxIsSpacingChild
-
-  if (isSpacingChild) {
+  if (props.__boxIsSpacingChild) {
     const spaceBetweenPx = space(props.__boxParentSpaceBetween)
 
     style.flexGrow = props.fill ? 1 : 0
     style.padding = spaceBetweenPx / 2
   }
 
-  if (isSpacingContainer) {
-    const spaceBetween = props.noSpaceBetween ? 0 : props.spaceBetween
+  if (props.stacked || props.horizontal) {
+    const spaceBetween = getSpaceBetween(props)
     const spaceBetweenPx = space(spaceBetween)
 
-    const isHorizontal = props.horizontal || props.wrap
-
-    style.flexDirection = isHorizontal ? 'row' : 'column'
+    style.flexDirection = props.horizontal ? 'row' : 'column'
     style.margin = -(spaceBetweenPx / 2)
 
-    style.alignItems = isHorizontal
-      ? HORIZONTAL_VALIGN_MAP[props.vAlign]
-      : STACKED_HALIGN_MAP[props.hAlign]
-    style.justifyContent = isHorizontal
-      ? HORIZONTAL_HALIGN_MAP[props.hAlign]
-      : STACKED_VALIGN_MAP[props.vAlign]
+    style.alignItems = computeAlignItems(props)
+    style.justifyContent = computeJustifyContent(props)
+
+    if (style.alignItems == null) delete style.alignItems
+    if (style.justifyContent == null) delete style.justifyContent
 
     if (props.wrap) {
       style.flexWrap = 'wrap'
@@ -152,7 +108,7 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
 
     const flattenedChildren = React.Children.toArray(props.children)
 
-    const children = flattenedChildren.map((child, index) =>
+    const children = flattenedChildren.map((child, index) => (
       <Box
         key={index}
         fill={child.props.fill}
@@ -163,47 +119,24 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
         {...(child.type === Box ? child.props : {})}
       >
         {child.type === Box ? child.props.children : child}
-      </Box>,
-    )
+      </Box>
+    ))
 
-    return (
-      <View style={style}>
-        {children}
-      </View>
-    )
+    return <View style={style}>{children}</View>
   }
 
   const child = React.Children.only(props.children)
 
-  return (
-    <View style={style}>
-      {child}
-    </View>
-  )
+  return <View style={style}>{child}</View>
 })
-
-Box.defaultProps = {
-  spaceBetween: 1,
-}
-
-const calculateSize = size => {
-  if (!size) {
-    return undefined
-  }
-
-  if (size <= 1) {
-    // percentage
-    return `${size * 100}%`
-  }
-
-  return size
-}
-
-const BREAKPOINTS = [767, 991, 1199, 1300]
 
 const getCurrentValuesForResponsiveProps = props => ({
   w: getCurrentValueForResponsiveProp(props.w),
   h: getCurrentValueForResponsiveProp(props.h),
+  top: getCurrentValueForResponsiveProp(props.top),
+  right: getCurrentValueForResponsiveProp(props.right),
+  bottom: getCurrentValueForResponsiveProp(props.bottom),
+  left: getCurrentValueForResponsiveProp(props.left),
 })
 
 const getCurrentValueForResponsiveProp = value => {
