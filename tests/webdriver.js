@@ -16,7 +16,7 @@ const BASE_URL_MAP = {
 
 module.exports = createWebdriver({
   browserPoolConcurrency: {
-    docker: 6,
+    docker: 3,
   },
 
   config: matrix => ({
