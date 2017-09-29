@@ -10,6 +10,7 @@ import {
   computeAlignItems,
   computeJustifyContent,
 } from './common'
+import { getCurrentValueForResponsiveProp } from './util/native'
 import type { BoxProps } from './common'
 
 const rerenderOnViewportChange = Component =>
@@ -80,6 +81,8 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
     left: calculatePosition(responsiveProps.left),
     width,
     height,
+    order: responsiveProps.order,
+    display: responsiveProps.visible === false ? 'none' : 'flex',
   }
 
   if (props.__boxIsSpacingChild) {
@@ -130,36 +133,17 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
   return <View style={style}>{child}</View>
 })
 
-const getCurrentValuesForResponsiveProps = props => ({
-  w: getCurrentValueForResponsiveProp(props.w),
-  h: getCurrentValueForResponsiveProp(props.h),
-  top: getCurrentValueForResponsiveProp(props.top),
-  right: getCurrentValueForResponsiveProp(props.right),
-  bottom: getCurrentValueForResponsiveProp(props.bottom),
-  left: getCurrentValueForResponsiveProp(props.left),
-})
-
-const getCurrentValueForResponsiveProp = value => {
-  if (!Array.isArray(value)) {
-    // value is scalar value so it will be the same across breakpoints
-    return value
-  }
-
+const getCurrentValuesForResponsiveProps = props => {
   const windowWidth = Dimensions.get('window').width
-  let currentBreakpointIndex = BREAKPOINTS.length - 1
 
-  for (let i = 0; i < BREAKPOINTS.length; i++) {
-    if (windowWidth < BREAKPOINTS[i]) {
-      currentBreakpointIndex = i
-      break
-    }
+  return {
+    w: getCurrentValueForResponsiveProp(props.w, windowWidth, BREAKPOINTS),
+    h: getCurrentValueForResponsiveProp(props.h, windowWidth, BREAKPOINTS),
+    top: getCurrentValueForResponsiveProp(props.top, windowWidth, BREAKPOINTS),
+    right: getCurrentValueForResponsiveProp(props.right, windowWidth, BREAKPOINTS),
+    bottom: getCurrentValueForResponsiveProp(props.bottom, windowWidth, BREAKPOINTS),
+    left: getCurrentValueForResponsiveProp(props.left, windowWidth, BREAKPOINTS),
+    order: getCurrentValueForResponsiveProp(props.order, windowWidth, BREAKPOINTS),
+    visible: getCurrentValueForResponsiveProp(props.visible, windowWidth, BREAKPOINTS),
   }
-
-  if (currentBreakpointIndex == null) return null
-
-  if (currentBreakpointIndex > value.length - 1) {
-    return value[value.length - 1]
-  }
-
-  return value[currentBreakpointIndex]
 }

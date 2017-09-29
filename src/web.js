@@ -101,6 +101,8 @@ const RESPONSIVE_PROP_SELECTOR = {
   right: value => ({ right: calculatePosition(value) }),
   bottom: value => ({ bottom: calculatePosition(value) }),
   left: value => ({ left: calculatePosition(value) }),
+  order: value => ({ order: value }),
+  visible: value => ({ display: value === true ? 'flex' : 'none' }),
 }
 
 const RESPONSIVE_PROPS = Object.keys(RESPONSIVE_PROP_SELECTOR)

@@ -61,6 +61,11 @@ test(
       'multiple children with space between horizontal alignment',
       elementByTest('horizontal multiple children with space between horizontal alignment'),
     )
+
+    capture(
+      'children visibility at different breakpoints',
+      elementByTest('horizontal children visibility at different breakpoints'),
+    )
   }),
 )
 
@@ -78,6 +83,26 @@ test(
     )
 
     capture('with responsive widths', elementByTest('horizontal columns with responsive widths'))
+
+    capture(
+      'with responsive widths with sparse array',
+      elementByTest('horizontal columns with responsive widths with sparse array'),
+    )
+
+    capture(
+      'with responsive widths with nulls in array',
+      elementByTest('horizontal columns with responsive widths with nulls in array'),
+    )
+
+    capture(
+      'reordering at different breakpoints',
+      elementByTest('horizontal columns reordering at different breakpoints'),
+    )
+
+    capture(
+      'visibility at different breakpoints',
+      elementByTest('horizontal columns visibility at different breakpoints'),
+    )
   }),
 )
 

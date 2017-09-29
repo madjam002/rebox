@@ -3,8 +3,10 @@ import { render } from 'react-dom'
 import { Router, Route, hashHistory } from 'react-router'
 import { injectGlobal } from 'styled-components'
 
-import * as native from './native.render'
-import * as web from './web.render'
+import { Box as NativeBox } from '../src/native'
+import { Box as WebBox } from '../src/web'
+
+import renderTests from './render'
 
 // eslint-disable-next-line
 injectGlobal`
@@ -12,6 +14,9 @@ injectGlobal`
     font-family: 'Roboto Mono';
   }
 `
+
+const web = renderTests({ Box: WebBox })
+const native = renderTests({ Box: NativeBox })
 
 render(
   <Router history={hashHistory}>

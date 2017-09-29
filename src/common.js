@@ -26,6 +26,12 @@ type BoxCoreProps = {|
   // general size
   w?: ResponsiveProp<number>,
   h?: ResponsiveProp<number>,
+
+  // ordering
+  order?: ResponsiveProp<number>,
+
+  // visibility
+  visible?: ResponsiveProp<boolean>,
 |}
 
 type BoxMultiChildProps = {|
