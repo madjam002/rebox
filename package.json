@@ -12,7 +12,7 @@
     "screenie": "screenie -r babel-register tests/test.js",
     "screenie-webpack": "webpack-dev-server --config tests/webpack.config.js",
     "screenie-ci": "selenium-standalone install && concurrently -k -r --success first \"sleep 5 && npm run screenie\" \"bash ./resources/scripts/start-selenium.sh\" \"npm run screenie-webpack\"",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
