@@ -148,8 +148,12 @@ const getSpacingContainerStyle = props => {
   if (style.alignItems == null) delete style.alignItems
   if (style.justifyContent == null) delete style.justifyContent
 
-  if (props.wrap !== false) {
+  if (isHorizontal && props.wrap !== false) {
     style.flexWrap = 'wrap'
+  }
+
+  if (isHorizontal) {
+    style.flexShrink = 1
   }
 
   return style
@@ -161,7 +165,7 @@ const StyledBox = styled.div`
   flex-shrink: 0;
   position: ${props => (props.hasPosition ? 'absolute' : 'relative')};
   box-sizing: border-box;
-
+  flex-direction: column;
   ${props => props.isSpacingContainer && getSpacingContainerStyle};
 
   ${props =>
@@ -169,6 +173,7 @@ const StyledBox = styled.div`
     css`
       padding: ${props => px(space(props.__boxParentSpaceBetween) / 2)};
       flex-grow: ${props => (props.fill ? 1 : 0)};
+      ${props => props.fill && css`flex-shrink: 1;`};
     `};
 
   ${props => getValuesForResponsiveProps(props, 0)} ${mediaQueries};

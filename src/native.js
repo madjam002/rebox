@@ -90,6 +90,10 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
 
     style.flexGrow = props.fill ? 1 : 0
     style.padding = spaceBetweenPx / 2
+
+    if (props.fill) {
+      style.flexShrink = 1
+    }
   }
 
   if (props.stacked || props.horizontal) {
@@ -105,8 +109,12 @@ export const Box = rerenderOnViewportChange((_props: BoxProps) => {
     if (style.alignItems == null) delete style.alignItems
     if (style.justifyContent == null) delete style.justifyContent
 
-    if (props.wrap !== false) {
+    if (props.horizontal && props.wrap !== false) {
       style.flexWrap = 'wrap'
+    }
+
+    if (props.horizontal) {
+      style.flexShrink = 1
     }
 
     const flattenedChildren = React.Children.toArray(props.children)

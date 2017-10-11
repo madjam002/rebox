@@ -195,6 +195,61 @@ export default ({ Box }: { Box: typeof Box }) => ({
           </Box>
         </Box>
       </Test>
+
+      <Test name="horizontal children should not overflow">
+        <Box horizontal vAlign="center" wrap={false}>
+          <Box>
+            <DebugBox />
+          </Box>
+          <Box fill>
+            <DebugBox label="blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+              blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+              blah blah" />
+          </Box>
+          <Box>
+            <DebugBox />
+          </Box>
+        </Box>
+      </Test>
+
+      <Test name="horizontal should shrink if necessary" height={500}>
+        <div
+          style={{
+            overflowX: 'auto',
+            padding: 20,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Box horizontal wrap={false}>
+            <Box>
+              <DebugBox />
+            </Box>
+            <div
+              style={{
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Box stacked>
+                <DebugBox />
+                <DebugBox />
+                <DebugBox />
+                <DebugBox />
+                <DebugBox />
+                <DebugBox />
+                <DebugBox />
+                <DebugBox />
+              </Box>
+            </div>
+            <Box>
+              <DebugBox />
+            </Box>
+          </Box>
+        </div>
+      </Test>
     </div>
   ),
 
@@ -434,6 +489,18 @@ export default ({ Box }: { Box: typeof Box }) => ({
           </Box>
         </Box>
       </Test>
+
+      <Test name="stacked should never wrap" height={300}>
+        <Box stacked>
+          <DebugBox />
+          <DebugBox />
+          <DebugBox />
+          <DebugBox />
+          <DebugBox />
+          <DebugBox />
+          <DebugBox />
+        </Box>
+      </Test>
     </div>
   ),
   StackedAlignment: () => (
@@ -489,6 +556,30 @@ export default ({ Box }: { Box: typeof Box }) => ({
       <Test name="standalone fill all available space" height={500}>
         <Box>
           <DebugBox />
+        </Box>
+      </Test>
+
+      <Test name="standalone layout as column" height={500}>
+        <Box horizontal>
+          <Box>
+            <DebugBox />
+          </Box>
+          <Box fill>
+            <button
+              style={{
+                display: 'block',
+                background: 'black',
+                color: 'white',
+                border: 'none',
+                padding: 5,
+              }}
+            >
+              test
+            </button>
+          </Box>
+          <Box>
+            <DebugBox />
+          </Box>
         </Box>
       </Test>
     </div>

@@ -66,6 +66,13 @@ test(
       'children visibility at different breakpoints',
       elementByTest('horizontal children visibility at different breakpoints'),
     )
+
+    capture(
+      'children should not overflow',
+      elementByTest('horizontal children should not overflow'),
+    )
+
+    capture('should shrink if necessary', elementByTest('horizontal should shrink if necessary'))
   }),
 )
 
@@ -142,6 +149,8 @@ test(
       'stacked children with right alignment with horizontal',
       elementByTest('stacked children with right alignment with horizontal'),
     )
+
+    capture('stacked should never wrap', elementByTest('stacked should never wrap'))
   }),
 )
 test(
@@ -178,6 +187,7 @@ test(
   'standalone',
   testRoute('/standalone', ({ capture }) => {
     capture('fill all available space', elementByTest('standalone fill all available space'))
+    capture('layout as column', elementByTest('standalone layout as column'))
   }),
 )
 
