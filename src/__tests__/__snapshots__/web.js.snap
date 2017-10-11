@@ -2,16 +2,16 @@
 
 exports[`should render when some of the children are null 1`] = `
 <div
-  className="sc-bdVaJa kUCJnS"
+  className="sc-bdVaJa cOuxAJ"
 >
   <div
-    className="sc-bdVaJa ldPWqb"
+    className="sc-bdVaJa jXXnLD"
     fill={undefined}
   >
     <div />
   </div>
   <div
-    className="sc-bdVaJa ldPWqb"
+    className="sc-bdVaJa jXXnLD"
     fill={undefined}
   >
     <span />
@@ -21,21 +21,21 @@ exports[`should render when some of the children are null 1`] = `
 
 exports[`should render when some of the children are strings 1`] = `
 <div
-  className="sc-bdVaJa kUCJnS"
+  className="sc-bdVaJa cOuxAJ"
 >
   <div
-    className="sc-bdVaJa ldPWqb"
+    className="sc-bdVaJa jXXnLD"
     fill={undefined}
   >
     <div />
   </div>
   <div
-    className="sc-bdVaJa ldPWqb"
+    className="sc-bdVaJa jXXnLD"
   >
     I am a string!
   </div>
   <div
-    className="sc-bdVaJa ldPWqb"
+    className="sc-bdVaJa jXXnLD"
     fill={undefined}
   >
     <span />
